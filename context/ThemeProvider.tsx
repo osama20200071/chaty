@@ -1,11 +1,17 @@
 import React, { PropsWithChildren } from "react";
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import { useColorScheme, vars } from "nativewind";
 
-export const Theme = ({ children }: PropsWithChildren) => {
+export const Theme = ({
+  children,
+  className,
+}: PropsWithChildren<ViewProps>) => {
   const { colorScheme } = useColorScheme();
   return (
-    <View style={themes[colorScheme ?? "light"]} className="flex-1 bg-primary">
+    <View
+      style={themes[colorScheme ?? "light"]}
+      className={`flex-1 bg-primary ${className}`}
+    >
       {children}
     </View>
   );
