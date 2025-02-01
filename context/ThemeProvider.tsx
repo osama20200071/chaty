@@ -10,7 +10,7 @@ export const Theme = ({
   return (
     <View
       style={themes[colorScheme ?? "light"]}
-      className={`flex-1 bg-primary ${className}`}
+      className={`flex-1 bg-primary ${className ?? " "}`}
     >
       {children}
     </View>
