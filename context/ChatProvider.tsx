@@ -76,6 +76,12 @@ const ChatProvider = ({ children }: PropsWithChildren) => {
     };
   }, [user?.id]);
 
+  // this is very important to make sure the chat is ready before rendering the chat component
+  // and to make sure that the user is already connected so we can add the device to the stream chat backend
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <ChatContext.Provider value={{ isReady }}>
       <OverlayProvider>

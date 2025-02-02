@@ -10,12 +10,12 @@ import { useChatContext } from "@/context/ChatProvider";
 import { useUser } from "@clerk/clerk-expo";
 
 const HomeScreen = () => {
-  const { isReady } = useChatContext();
+  // const { isReady } = useChatContext();
   const { user } = useUser();
 
-  if (!isReady) {
-    return <ActivityIndicator className="mt-8" size="large" />;
-  }
+  // if (!isReady) {
+  //   return <ActivityIndicator className="mt-8" size="large" />;
+  // }
 
   // Custom Preview with the same UI as default
   const CustomChannelTitle = ({
