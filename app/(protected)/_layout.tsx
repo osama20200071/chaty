@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, Stack } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import ChatProvider from "@/context/ChatProvider";
 import { NotificationsProvider } from "@/context/NotificationProvider";
+import * as SplashScreen from "expo-splash-screen";
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
@@ -10,10 +11,20 @@ export const unstable_settings = {
 };
 const AppLayout = () => {
   // check for auth
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
 
   if (!isSignedIn) {
     return <Redirect href="/(auth)/sign-in" />;
+  }
+
+  useEffect(() => {
+    if (isLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoaded]);
+
+  if (!isLoaded) {
+    return null;
   }
 
   return (

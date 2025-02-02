@@ -3,7 +3,7 @@ import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
 import { ClerkAPIError } from "@clerk/types";
 import { Href, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Text, useColorScheme, View } from "react-native";
+import { Text, View } from "react-native";
 import { ScrollView } from "@/components/ScrollView";
 import TextInput from "@/components/TextInput";
 import Button from "@/components/Button";
@@ -11,7 +11,6 @@ import Button from "@/components/Button";
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
-  const colorScheme = useColorScheme();
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +63,6 @@ export default function Page() {
     [router]
   );
 
-  console.log(colorScheme);
   return (
     <ScrollView contentContainerClassName="p-8 ">
       <TextInput

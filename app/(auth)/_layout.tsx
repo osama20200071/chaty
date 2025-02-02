@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, Stack } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
+import * as SplashScreen from "expo-splash-screen";
 
 function AuthRoutesLayout() {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
 
   if (isSignedIn) {
     return <Redirect href={"/"} />;
+  }
+
+  useEffect(() => {
+    if (isLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoaded]);
+
+  if (!isLoaded) {
+    return null;
   }
 
   return (
