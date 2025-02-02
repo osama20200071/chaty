@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { Alert, Image, View, StyleSheet, Text } from "react-native";
-import { useClerk, useUser } from "@clerk/clerk-expo";
+import { useAuth, useClerk, useUser } from "@clerk/clerk-expo";
 import { ScrollView } from "@/components/ScrollView";
 import Button from "@/components/Button";
 import ThemedText from "@/components/ThemedText";
@@ -12,7 +12,7 @@ export default function ProfileScreen() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.replace("/");
+    router.replace("/(auth)/sign-in");
   };
 
   const handleDeleteAccount = async () => {

@@ -41,10 +41,12 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     importance: Notifications.AndroidImportance.MAX,
     sound: "default", // 🔹 Enable sound
   });
+  let userName = message.message.user?.name;
+  userName = userName?.at(0)?.toUpperCase().concat(userName?.slice(1));
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: `New message from ${message.message.user?.name}`,
+      title: `${userName}`,
       body: message.message.text,
       data: remoteMessage.data,
       sound: "default", // 🔹 Ensure sound is enabled
