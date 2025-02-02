@@ -20,7 +20,8 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.osamak.chaty"
+      "package": "com.osamak.chaty",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

@@ -9,6 +9,7 @@ import { StreamChat } from "stream-chat";
 import { Chat, OverlayProvider } from "stream-chat-expo";
 // import { tokenProvider } from "@/utils/supabaseUtils";
 import { useUser } from "@clerk/clerk-expo";
+import { tokenProvider, useSupabase } from "@/lib/supabase";
 
 const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY);
 
@@ -31,6 +32,7 @@ export const useChatContext = (): ChatContextProps => {
 const ChatProvider = ({ children }: PropsWithChildren) => {
   const [isReady, setIsReady] = useState(false);
   const { user } = useUser();
+  const supabase = useSupabase();
 
   useEffect(() => {
     if (!user) {
@@ -45,9 +47,7 @@ const ChatProvider = ({ children }: PropsWithChildren) => {
             name: user.firstName as string,
             image: user.imageUrl,
           },
-          // user.id
-          client.devToken(user.id)
-          // tokenProvider
+          () => tokenProvider(supabase)
         );
         setIsReady(true);
       } catch (error) {
