@@ -7,9 +7,9 @@ import React, {
 } from "react";
 import { StreamChat } from "stream-chat";
 import { Chat, OverlayProvider } from "stream-chat-expo";
-// import { tokenProvider } from "@/utils/supabaseUtils";
 import { useUser } from "@clerk/clerk-expo";
 import { tokenProvider, useSupabase } from "@/lib/supabase";
+import AsyncStorage from "@/utils/AsyncStorage";
 
 const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY);
 
@@ -34,32 +34,45 @@ const ChatProvider = ({ children }: PropsWithChildren) => {
   const { user } = useUser();
   const supabase = useSupabase();
 
-  useEffect(() => {
-    if (!user) {
-      return;
+  if (!user) {
+    return;
+  }
+
+  const connect = async () => {
+    const token = await tokenProvider(supabase);
+
+    try {
+      await client.connectUser(
+        {
+          id: user.id as string,
+          name: user.firstName as string,
+          image: user.imageUrl,
+        },
+        token
+      );
+      await AsyncStorage.setItem("login-config", {
+        userId: user.id as string,
+        userImage: user.imageUrl,
+        userName: user.firstName as string,
+        userToken: token,
+      });
+      setIsReady(true);
+    } catch (error) {
+      console.error("Error connecting to Stream Chat:", error);
     }
+  };
 
-    const connect = async () => {
-      try {
-        await client.connectUser(
-          {
-            id: user.id as string,
-            name: user.firstName as string,
-            image: user.imageUrl,
-          },
-          () => tokenProvider(supabase)
-        );
-        setIsReady(true);
-      } catch (error) {
-        console.error("Error connecting to Stream Chat:", error);
-      }
-    };
+  const disconnect = async () => {
+    await client.disconnectUser(); // Disconnect when the component unmounts
+    await AsyncStorage.removeItem("login-config");
+    setIsReady(false);
+  };
 
+  useEffect(() => {
     connect();
 
     return () => {
-      client.disconnectUser(); // Disconnect when the component unmounts
-      setIsReady(false);
+      disconnect();
     };
   }, [user?.id]);
 
