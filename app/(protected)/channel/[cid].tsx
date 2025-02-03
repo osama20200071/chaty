@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Channel as ChannelType } from "stream-chat";
 import { useLocalSearchParams } from "expo-router";
@@ -26,27 +26,17 @@ const ChannelScreen = () => {
     fetchChannel();
   }, []);
 
-  if (currentChannel) {
-    return (
-      <>
-        <Channel channel={currentChannel}>
-          <MessageList />
-          <SafeAreaView edges={["bottom"]} className="mb-14">
-            <MessageInput />
-          </SafeAreaView>
-        </Channel>
-      </>
-    );
-  }
-
   if (!currentChannel) {
     return <ActivityIndicator className="mt-8" size="large" />;
   }
 
   return (
-    <View>
-      <Text>ChannelScreen</Text>
-    </View>
+    <Channel channel={currentChannel}>
+      <MessageList />
+      <SafeAreaView edges={["bottom"]}>
+        <MessageInput />
+      </SafeAreaView>
+    </Channel>
   );
 };
 

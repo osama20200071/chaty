@@ -52,9 +52,9 @@ export default function ProfileScreen() {
             />
           ) : null}
           <View style={styles.userInfo}>
-            <Text className="text-lg font-bold capitalize">
+            <ThemedText className="text-lg font-bold capitalize">
               Hello {user?.firstName}
-            </Text>
+            </ThemedText>
             <ThemedText className="opacity-70">
               {user?.emailAddresses[0].emailAddress}
             </ThemedText>
