@@ -1,13 +1,11 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
-import {
-  ChannelList,
-  ChannelPreviewTitle,
-  ChannelPreviewTitleProps,
-} from "stream-chat-expo";
+import { ChannelList } from "stream-chat-expo";
 import { router } from "expo-router";
 import { useChatContext } from "@/context/ChatProvider";
 import { useUser } from "@clerk/clerk-expo";
+import ChannelListItem from "@/components/ChannelListItem";
+import CustomChannelTitle from "@/components/CustomChannelTitle";
 
 const HomeScreen = () => {
   const { isReady } = useChatContext();
@@ -17,17 +15,6 @@ const HomeScreen = () => {
     return <ActivityIndicator className="mt-8" size="large" />;
   }
 
-  // Custom Preview with the same UI as default
-  const CustomChannelTitle = ({
-    channel,
-    displayName: dd,
-  }: ChannelPreviewTitleProps) => {
-    const otherMember = Object.values(channel.state.members).find(
-      (member) => member.user_id !== user?.id
-    );
-    const displayName = otherMember?.user?.name || "New Friend";
-    return <ChannelPreviewTitle channel={channel} displayName={displayName} />;
-  };
   return (
     <ChannelList
       numberOfSkeletons={6}
@@ -35,8 +22,8 @@ const HomeScreen = () => {
         type: "messaging",
         members: { $in: [user?.id as string] },
       }}
-      onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
-      PreviewTitle={CustomChannelTitle}
+      // onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
+      Preview={ChannelListItem}
     />
   );
 };

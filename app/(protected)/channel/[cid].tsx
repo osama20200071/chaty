@@ -31,7 +31,7 @@ const ChannelScreen = () => {
       <>
         <Channel channel={currentChannel}>
           <MessageList />
-          <SafeAreaView edges={["bottom"]}>
+          <SafeAreaView edges={["bottom"]} className="mb-14">
             <MessageInput />
           </SafeAreaView>
         </Channel>
