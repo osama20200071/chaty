@@ -6,6 +6,9 @@ import { tokenCache } from "@/cache";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as SplashScreen from "expo-splash-screen";
+import "../utils/messaging-service";
+import { useEffect } from "react";
+import { registerBackgroundNotificationHandler } from "../utils/messaging-service";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -15,6 +18,10 @@ export default function RootLayout() {
   if (!publishableKey) {
     throw new Error("Add EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY to your .env file");
   }
+
+  useEffect(() => {
+    registerBackgroundNotificationHandler();
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

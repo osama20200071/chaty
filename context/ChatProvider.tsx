@@ -10,55 +10,8 @@ import { Chat, OverlayProvider } from "stream-chat-expo";
 import { useUser } from "@clerk/clerk-expo";
 import { tokenProvider, useSupabase } from "@/lib/supabase";
 import AsyncStorage from "@/utils/AsyncStorage";
-import * as Notifications from "expo-notifications";
 import messaging from "@react-native-firebase/messaging";
 import { PermissionsAndroid, Platform } from "react-native";
-
-type LoginConfig = {
-  userId: string;
-  userImage: string;
-  userName: string;
-  userToken: string;
-};
-// setup the background handler for the push notifications
-messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  const messageId = remoteMessage.data?.id;
-  if (!messageId) return;
-  const config = await AsyncStorage.getItem<LoginConfig>("login-config", null);
-  if (!config) return;
-
-  // console.log("config", JSON.stringify(config, null, 2));
-
-  const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY);
-
-  const user = {
-    id: config.userId,
-    image: config.userImage,
-    name: config.userName,
-  };
-
-  await client._setToken(user, config.userToken);
-  const message = await client.getMessage(messageId as string);
-
-  await Notifications.setNotificationChannelAsync("chat-messages", {
-    name: "Chat Messages",
-    importance: Notifications.AndroidImportance.MAX,
-    sound: "default", // 🔹 Enable sound
-  });
-  let userName = message.message.user?.name;
-  userName = userName?.at(0)?.toUpperCase().concat(userName?.slice(1));
-
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: `${userName}`,
-      body: message.message.text,
-      data: remoteMessage.data,
-      sound: "default", // 🔹 Ensure sound is enabled
-      subtitle: "Messages",
-    },
-    trigger: null,
-  });
-});
 
 const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY);
 
@@ -104,9 +57,9 @@ const ChatProvider = ({ children }: PropsWithChildren) => {
         userName: user.firstName as string,
         userToken: token,
       });
+      setIsReady(true);
       await requestPermission();
       await registerPushToken();
-      setIsReady(true);
     } catch (error) {
       console.error("Error connecting to Stream Chat:", error);
     }
